@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeuVote — Teume Voting & Community</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7fb;
+  color: #222;
+  padding-bottom: 80px;
+}
+
+header {
+  background: linear-gradient(135deg, #111827, #4f46e5);
+  color: white;
+  padding: 25px 20px;
+  border-radius: 0 0 25px 25px;
+}
+
+header h1 {
+  font-size: 28px;
+  margin-bottom: 7px;
+}
+
+header p {
+  opacity: .9;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 18px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.section-title {
+  font-size: 21px;
+  font-weight: bold;
+  margin: 25px 0 12px;
+}
+
+.vote-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.member-img {
+  width: 75px;
+  height: 75px;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#ddd,#aaa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.vote-info {
+  flex: 1;
+}
+
+.vote-info h3 {
+  margin-bottom: 5px;
+}
+
+.progress {
+  background: #eee;
+  height: 9px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 9px 0;
+}
+
+.progress div {
+  height: 100%;
+  background: #4f46e5;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+}
+
+.menu-item {
+  background: white;
+  border-radius: 16px;
+  padding: 17px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,.05);
+  cursor: pointer;
+}
+
+.menu-item .icon {
+  font-size: 27px;
+  margin-bottom: 7px;
+}
+
+.news {
+  border-left: 4px solid #4f46e5;
+  padding-left: 12px;
+  margin-bottom: 15px;
+}
+
+.news small {
+  color: #777;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.balance {
+  font-size: 25px;
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+.post {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.post:last-child {
+  border-bottom: none;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-top: 30px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 4px;
+  z-index: 10;
+}
+
+.bottom-nav a {
+  text-decoration: none;
+  color: #555;
+  font-size: 11px;
+  text-align: center;
+}
+
+.bottom-nav span {
+  display: block;
+  font-size: 21px;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>💎 TeuVote</h1>
+  <p>Tempat Teume bersatu untuk support TREASURE 💙</p>
+</header>
+
+<div class="container">
+
+  <div class="section-title">🔥 Voting Berlangsung</div>
+
+  <div class="card vote-card">
+    <div class="member-img">💎</div>
+
+    <div class="vote-info">
+      <h3>Voting TREASURE</h3>
+      <small>Berakhir dalam 2 hari</small>
+
+      <div class="progress">
+        <div id="voteProgress" style="width:65%"></div>
+      </div>
+
+      <small><span id="voteCount">650</span> votes · 65%</small>
+    </div>
+
+    <button onclick="vote()">Vote</button>
+  </div>
+
+  <div class="section-title">✨ Menu TeuVote</div>
+
+  <div class="menu-grid">
+
+    <div class="menu-item" onclick="showSection('tutorial')">
+      <div class="icon">📚</div>
+      Tutorial
+    </div>
+
+    <div class="menu-item" onclick="showSection('update')">
+      <div class="icon">📰</div>
+      Update TREASURE
+    </div>
+
+    <div class="menu-item" onclick="showSection('team')">
+      <div class="icon">👥</div>
+      Team / Kelompok
+    </div>
+
+    <div class="menu-item" onclick="showSection('donasi')">
+      <div class="icon">💰</div>
+      Donasi & Transparansi
+    </div>
+
+    <div class="menu-item" onclick="showSection('space')">
+      <div class="icon">💬</div>
+      Teume Space
+    </div>
+
+    <div class="menu-item" onclick="showSection('ask')">
+      <div class="icon">❓</div>
+      Ask
+    </div>
+
+    <div class="menu-item" onclick="showSection('saran')">
+      <div class="icon">💡</div>
+      Saran
+    </div>
+
+    <div class="menu-item" onclick="showSection('game')">
+      <div class="icon">🎮</div>
+      Game
+    </div>
+
+  </div>
+
+  <div id="tutorial">
+    <div class="section-title">📚 Tutorial</div>
+
+    <div class="card">
+      <h3>Cara Voting</h3>
+      <p>Pelajari cara membuat akun, mengumpulkan vote point, dan melakukan voting untuk TREASURE.</p>
+      <br>
+      <button onclick="alert('Tutorial voting akan tersedia di sini!')">
+        Baca Tutorial
+      </button>
+    </div>
+  </div>
+
+  <div id="update">
+    <div class="section-title">📰 Update TREASURE</div>
+
+    <div class="card">
+      <div class="news">
+        <h3>Update Terbaru TREASURE</h3>
+        <small>Hari ini</small>
+        <p>Tempat untuk berita, jadwal, comeback, voting dan update terbaru TREASURE.</p>
+      </div>
+
+      <div class="news">
+        <h3>Voting Baru Dibuka!</h3>
+        <small>Kemarin</small>
+        <p>Yuk ajak Teume lainnya untuk ikut voting bersama.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="team">
+    <div class="section-title">👥 Team / Kelompok</div>
+
+    <div class="card">
+      <h3>Team Voting</h3>
+      <p>Tempat pembagian tugas Teume untuk membantu voting di berbagai aplikasi.</p>
+      <br>
+      <p>🎯 Target: 10.000 votes</p>
+      <p>📌 Tugas: Collect point & voting</p>
+    </div>
+  </div>
+
+  <div id="donasi">
+    <div class="section-title">💰 Donasi & Transparansi</div>
+
+    <div class="card">
+      <p>Total dana terkumpul</p>
+      <div class="balance">Rp 1.500.000</div>
+
+      <div class="progress">
+        <div style="width:75%"></div>
+      </div>
+
+      <div class="stat">
+        <span>Target</span>
+        <b>Rp 2.000.000</b>
+      </div>
+
+      <hr><br>
+
+      <h3>Transparansi</h3>
+      <p>Masuk: Rp 1.500.000</p>
+      <p>Keluar: Rp 500.000</p>
+      <p>Saldo: Rp 1.000.000</p>
+    </div>
+  </div>
+
+  <div id="space">
+    <div class="section-title">💬 Teume Space</div>
+
+    <div class="card">
+      <div class="post">
+        <b>Teume 01</b>
+        <p>Semangat voting semuanya! 💎</p>
+        <small>❤️ 24 · 💬 5</small>
+      </div>
+
+      <div class="post">
+        <b>Teume 02</b>
+        <p>Hari ini jangan lupa collect point ya!</p>
+        <small>❤️ 18 · 💬 3</small>
+      </div>
+    </div>
+  </div>
+
+  <div id="ask">
+    <div class="section-title">❓ Ask</div>
+
+    <div class="card">
+      <h3>Punya pertanyaan?</h3>
+
+      <input type="text" placeholder="Nama kamu">
+
+      <textarea rows="4" placeholder="Tulis pertanyaan kamu..."></textarea>
+
+      <button onclick="alert('Pertanyaan berhasil dikirim!')">
+        Kirim Pertanyaan
+      </button>
+    </div>
+  </div>
+
+  <div id="saran">
+    <div class="section-title">💡 Saran</div>
+
+    <div class="card">
+      <h3>Berikan Saran</h3>
+
+      <textarea rows="4" placeholder="Tulis saran untuk TeuVote..."></textarea>
+
+      <button onclick="alert('Terima kasih atas sarannya!')">
+        Kirim Saran
+      </button>
+    </div>
+  </div>
+
+  <div id="game">
+    <div class="section-title">🎮 Game</div>
+
+    <div class="card">
+      <h3>🎯 Tebak Member</h3>
+
+      <p>Siapa member TREASURE yang terkenal dengan suara khasnya?</p>
+
+      <br>
+
+      <button onclick="gameAnswer('A')">A. Pilih Jawaban</button>
+      <br><br>
+      <button onclick="gameAnswer('B')">B. Pilih Jawaban</button>
+    </div>
+  </div>
+
+  <footer>
+    💎 TeuVote · Teume support TREASURE<br>
+    Dibuat untuk komunitas Teume
+  </footer>
+
+</div>
+
+<div class="bottom-nav">
+  <a href="#">
+    <span>🏠</span>Home
+  </a>
+
+  <a href="#update">
+    <span>📰</span>Update
+  </a>
+
+  <a href="#team">
+    <span>👥</span>Team
+  </a>
+
+  <a href="#space">
+    <span>💬</span>Space
+  </a>
+
+  <a href="#game">
+    <span>🎮</span>Game
+  </a>
+</div>
+
+<script>
+
+let votes = 650;
+
+function vote() {
+  votes++;
+
+  document.getElementById("voteCount").innerText = votes;
+
+  let percent = Math.min((votes / 1000) * 100, 100);
+
+  document.getElementById("voteProgress").style.width = percent + "%";
+
+  alert("Vote berhasil! 💎");
+}
+
+function showSection(section) {
+  document.getElementById(section).scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function gameAnswer(answer) {
+  alert("Jawaban dicatat! 🎮");
+}
+
+</script>
+
+</body>
+  </html>
